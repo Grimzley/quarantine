@@ -20,6 +20,7 @@ public class Settings : MonoBehaviour {
     public void Start() {
         fullscreenToggle = GameObject.Find("FullscreenToggle").GetComponent<Toggle>();
         fullscreenToggle.onValueChanged.AddListener(SetFullscreen);
+        fullscreenToggle.isOn = GameManager.isFullscreen;
 
         resolutions = Screen.resolutions;
         resolutionsDropdown = GameObject.Find("ResolutionsDropdown").GetComponent<TMP_Dropdown>();
@@ -34,7 +35,7 @@ public class Settings : MonoBehaviour {
         }
         resolutionsDropdown.AddOptions(resolutionsOptions);
         resolutionsDropdown.onValueChanged.AddListener(SetResolution);
-        resolutionsDropdown.value = currentResolutionIndex;
+        resolutionsDropdown.value = GameManager.resolutionIndex == -1? currentResolutionIndex: GameManager.resolutionIndex;
         resolutionsDropdown.RefreshShownValue();
 
         qualityDropdown = GameObject.Find("QualityDropdown").GetComponent<TMP_Dropdown>();
@@ -42,32 +43,38 @@ public class Settings : MonoBehaviour {
         List<string> qualityOptions = new List<string> {"Very Low", "Low", "Medium", "High", "Very High", "Ultra"};
         qualityDropdown.AddOptions(qualityOptions);
         qualityDropdown.onValueChanged.AddListener(SetQuality);
-        qualityDropdown.value = 0;
+        qualityDropdown.value = GameManager.qualityIndex;
 
         volumeSlider = GameObject.Find("VolumeSlider").GetComponent<Slider>();
         volumeSlider.onValueChanged.AddListener(SetVolume);
+        volumeSlider.value = GameManager.volume;
 
         mouseSensitivitySlider = GameObject.Find("MouseSensitivitySlider").GetComponent<Slider>();
         mouseSensitivitySlider.onValueChanged.AddListener(SetMouseSensitivity);
+        mouseSensitivitySlider.value = GameManager.mouseSensitivity;
 
         back = GameObject.Find("BackButton").GetComponent<Button>();
         back.onClick.AddListener(Back);
     }
     public void SetFullscreen(bool isFullscreen) {
+        GameManager.isFullscreen = isFullscreen;
         Screen.fullScreen = isFullscreen;
     }
     public void SetResolution(int index) {
+        GameManager.resolutionIndex = index;
         Resolution resolution = resolutions[index];
         Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
     }
     public void SetQuality(int index) {
+        GameManager.qualityIndex = index;
         QualitySettings.SetQualityLevel(index);
     }
     public void SetVolume(float volume) {
+        GameManager.volume = volume;
         audioMixer.SetFloat("volume", volume);
     }
     public void SetMouseSensitivity(float sensitivity) {
-
+        GameManager.mouseSensitivity = sensitivity;
     }
     public void Back() {
         SceneManager.LoadScene("Menu");
