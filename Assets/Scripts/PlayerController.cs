@@ -13,11 +13,11 @@ public class PlayerController : MonoBehaviour {
     public float walkingSpeed = 7f;
     public float runningSpeed;
     public float currentSpeed;
-    public float jumpHeight = 0.9f;
+    public float jumpHeight = 0.75f;
     public bool isGrounded;
 
     public float gravity = -9.81f * 2f;
-    public float groundDistance = 0.1f;
+    public float groundDistance = 0.3f;
     public CharacterController controller;
     public Vector3 velocity;
     public Transform groundCheck;
