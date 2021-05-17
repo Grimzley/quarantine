@@ -8,6 +8,7 @@ public class GunController : MonoBehaviour {
 
     // Gun Animations
     public Animator animator;
+    public bool isRunning;
     public bool isReloading;
     public float reloadTime = 2f;
 
@@ -35,7 +36,14 @@ public class GunController : MonoBehaviour {
         currentMagazine = magazineSize;
     }
     public void Update() {
-        if (Input.GetButtonDown("Fire1") && Time.time >= timeToFire && !isReloading && currentMagazine > 0) {
+        if (Input.GetKey(KeyCode.LeftShift) && !isReloading) {
+            animator.SetBool("Run", true);
+            isRunning = true;
+        }else {
+            animator.SetBool("Run", false);
+            isRunning = false;
+        }
+        if (Input.GetButtonDown("Fire1") && Time.time >= timeToFire && !isReloading && currentMagazine > 0 && !isRunning) {
             timeToFire = Time.time + 1f / fireRate;
             animator.SetBool("Shoot", true);
             Shoot();
@@ -63,7 +71,7 @@ public class GunController : MonoBehaviour {
         }
     }
     public void ReloadGun() {
-        if (!isReloading && currentMagazine < magazineSize && currentAmmo > 0) {
+        if (!isReloading && currentMagazine < magazineSize && currentAmmo > 0 && !isRunning) {
             StartCoroutine(Reload());
         }
     }

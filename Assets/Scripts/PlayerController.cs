@@ -23,9 +23,13 @@ public class PlayerController : MonoBehaviour {
     public Transform groundCheck;
     public LayerMask groundMask;
 
+    // Player Sounds
+    public AudioSource playerMove;
     public void Start() {
         runningSpeed = walkingSpeed * 1.5f;
         currentSpeed = walkingSpeed;
+        playerMove.Play();
+        playerMove.Pause();
         Cursor.lockState = CursorLockMode.Locked;
     }
     public void Update() {
@@ -47,6 +51,11 @@ public class PlayerController : MonoBehaviour {
         float z = Input.GetAxis("Vertical");
         if (Input.GetButtonDown("Jump") && isGrounded) {
             velocity.y = Mathf.Sqrt(jumpHeight * gravity * -2f); // The velocity required to jump a height h: v = sqrt(h*g*-2)
+        }
+        if (x == 0 && z == 0 || !isGrounded) {
+            playerMove.Pause();
+        }else {
+            playerMove.UnPause();
         }
         if (Input.GetKeyDown("left shift")) {
             currentSpeed = runningSpeed;
