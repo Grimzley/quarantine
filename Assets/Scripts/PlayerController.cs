@@ -19,12 +19,17 @@ public class PlayerController : MonoBehaviour {
     public float gravity = -9.81f * 2f;
     public float groundDistance = 0.3f;
     public CharacterController controller;
+    public Vector3 move;
     public Vector3 velocity;
     public Transform groundCheck;
     public LayerMask groundMask;
 
     // Player Sounds
     public AudioSource playerMove;
+
+    // Player Stats
+    public float health = 25f;
+
     public void Start() {
         runningSpeed = walkingSpeed * 1.5f;
         currentSpeed = walkingSpeed;
@@ -62,7 +67,7 @@ public class PlayerController : MonoBehaviour {
         }else if (Input.GetKeyUp("left shift")) {
             currentSpeed = walkingSpeed;
         }
-        Vector3 move = transform.right * x + transform.forward * z;
+        move = transform.right * x + transform.forward * z;
         controller.Move(move * currentSpeed * Time.deltaTime);
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);

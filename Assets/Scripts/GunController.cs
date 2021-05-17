@@ -5,6 +5,7 @@ using UnityEngine;
 public class GunController : MonoBehaviour {
 
     public Camera mainCamera;
+    public PlayerController player;
 
     // Gun Animations
     public Animator animator;
@@ -36,7 +37,7 @@ public class GunController : MonoBehaviour {
         currentMagazine = magazineSize;
     }
     public void Update() {
-        if (Input.GetKey(KeyCode.LeftShift) && !isReloading) {
+        if (Input.GetKey(KeyCode.LeftShift) && !isReloading && (player.move.x != 0 || player.move.z != 0)) {
             animator.SetBool("Run", true);
             isRunning = true;
         }else {
@@ -59,7 +60,10 @@ public class GunController : MonoBehaviour {
         flash.Play();
         RaycastHit hit;
         if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out hit, range)) {
-            
+            if (hit.transform.tag == "Enemy") {
+                EnemyController enemy = hit.transform.GetComponent<EnemyController>();
+                enemy.TakeDamage(damage);
+            }
             if (hit.rigidbody != null) {
                 hit.rigidbody.AddForce(-hit.normal * force);
             }
