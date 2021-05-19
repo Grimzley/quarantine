@@ -107,7 +107,7 @@ NavMeshSettings:
     serializedVersion: 2
     agentTypeID: 0
     agentRadius: 0.25
-    agentHeight: 1.6
+    agentHeight: 1.5
     agentSlope: 60
     agentClimb: 0.5
     ledgeDropHeight: 5
@@ -68247,15 +68247,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5392894084021606062, guid: 3df5a4bad2bc8d448b8bf9e317311f34, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.6
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 5392894084021606062, guid: 3df5a4bad2bc8d448b8bf9e317311f34, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1.6
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 5392894084021606062, guid: 3df5a4bad2bc8d448b8bf9e317311f34, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1.6
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 5392894084021606062, guid: 3df5a4bad2bc8d448b8bf9e317311f34, type: 3}
       propertyPath: m_LocalPosition.x
@@ -68313,6 +68313,10 @@ PrefabInstance:
       propertyPath: animator
       value: 
       objectReference: {fileID: 3166231815108880751}
+    - target: {fileID: 8296172668715607551, guid: 3df5a4bad2bc8d448b8bf9e317311f34, type: 3}
+      propertyPath: timeToDie
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 8296172668715607551, guid: 3df5a4bad2bc8d448b8bf9e317311f34, type: 3}
       propertyPath: playerTransform
       value: 

@@ -11,9 +11,12 @@ public class EnemyController : MonoBehaviour {
     public Transform playerTransform;
 
     public bool linking;
+    public bool isDead;
 
     public float timeBetweenAttacks = 1f;
     public float timeToAttack;
+
+    public float timeToDie = 3f;
 
     // Enemy Sounds
     public AudioSource enemy;
@@ -36,7 +39,7 @@ public class EnemyController : MonoBehaviour {
 
         float distance = Vector3.Distance(transform.position, playerTransform.position) ;
 
-        if (distance <= agent.stoppingDistance) {
+        if (!isDead && distance <= agent.stoppingDistance) {
             // Face Player
             Vector3 direction = (playerTransform.position - transform.position).normalized;
             Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
@@ -51,6 +54,7 @@ public class EnemyController : MonoBehaviour {
             }
         }else {
             animator.SetBool("Attacking", false);
+            timeToAttack = timeBetweenAttacks;
         }
     }
     public void FixedUpdate() {
@@ -82,7 +86,14 @@ public class EnemyController : MonoBehaviour {
     public void TakeDamage(float damage) {
         health -= damage;
         if (health <= 0) {
-            Destroy(gameObject);
+            StartCoroutine(Die());
         }
+    }
+    public IEnumerator Die(){
+        isDead = true;
+        animator.SetTrigger("Death");
+        agent.isStopped = true; ;
+        yield return new WaitForSeconds(timeToDie);
+        Destroy(gameObject);
     }
 }

@@ -74,12 +74,11 @@ public class PlayerController : MonoBehaviour {
     }
     public void TakeDamage(float damage) {
         health -= damage;
-        Debug.LogError(health);
         if (health <= 0) {
             Die();
         }
     }
     public void Die() {
-        // Die
+
     }
 }
