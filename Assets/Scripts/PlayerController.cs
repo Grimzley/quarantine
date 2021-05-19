@@ -28,7 +28,7 @@ public class PlayerController : MonoBehaviour {
     public AudioSource playerMove;
 
     // Player Stats
-    public float health = 25f;
+    public float health = 100f;
 
     public void Start() {
         runningSpeed = walkingSpeed * 1.5f;
@@ -71,5 +71,15 @@ public class PlayerController : MonoBehaviour {
         controller.Move(move * currentSpeed * Time.deltaTime);
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
+    }
+    public void TakeDamage(float damage) {
+        health -= damage;
+        Debug.LogError(health);
+        if (health <= 0) {
+            Die();
+        }
+    }
+    public void Die() {
+        // Die
     }
 }

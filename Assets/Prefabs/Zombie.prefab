@@ -2957,6 +2957,10 @@ MonoBehaviour:
   player: {fileID: 0}
   playerTransform: {fileID: 0}
   linking: 0
+  isAttacking: 0
+  attackTime: 0
+  enemy: {fileID: 0}
+  audios: []
   health: 100
   damage: 25
   speed: 2
@@ -2974,7 +2978,7 @@ NavMeshAgent:
   m_Acceleration: 10
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 2
+  m_StoppingDistance: 3
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1

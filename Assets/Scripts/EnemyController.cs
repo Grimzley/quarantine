@@ -12,6 +12,9 @@ public class EnemyController : MonoBehaviour {
 
     public bool linking;
 
+    public float timeBetweenAttacks = 1f;
+    public float timeToAttack;
+
     // Enemy Sounds
     public AudioSource enemy;
     public AudioClip[] audios;
@@ -26,11 +29,13 @@ public class EnemyController : MonoBehaviour {
         agent = GetComponent<NavMeshAgent>();
         playerTransform = player.GetComponent<Transform>();
         StartCoroutine(playAudios());
+        timeToAttack = timeBetweenAttacks;
     }
     public void Update() {
         agent.SetDestination(playerTransform.position);
 
         float distance = Vector3.Distance(transform.position, playerTransform.position) ;
+
         if (distance <= agent.stoppingDistance) {
             // Face Player
             Vector3 direction = (playerTransform.position - transform.position).normalized;
@@ -38,7 +43,14 @@ public class EnemyController : MonoBehaviour {
             transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
 
             // Attack Player
-
+            animator.SetBool("Attacking", true);
+            timeToAttack -= Time.deltaTime;
+            if (timeToAttack <= 0f) {
+                player.TakeDamage(damage);
+                timeToAttack = timeBetweenAttacks;
+            }
+        }else {
+            animator.SetBool("Attacking", false);
         }
     }
     public void FixedUpdate() {

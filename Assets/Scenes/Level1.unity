@@ -47490,7 +47490,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   playerMove: {fileID: 1537514091}
-  health: 25
+  health: 100
 --- !u!82 &1537514091
 AudioSource:
   m_ObjectHideFlags: 0
@@ -68353,6 +68353,10 @@ PrefabInstance:
       propertyPath: audios.Array.data[7]
       value: 
       objectReference: {fileID: 8300000, guid: d108e9ae3908d4d479e1e41cca0188a3, type: 3}
+    - target: {fileID: 8296172668715607553, guid: 3df5a4bad2bc8d448b8bf9e317311f34, type: 3}
+      propertyPath: m_StoppingDistance
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 8974602309782676669, guid: 3df5a4bad2bc8d448b8bf9e317311f34, type: 3}
       propertyPath: m_Name
       value: Zombie
