@@ -22,7 +22,7 @@ public class GunController : MonoBehaviour {
     public ParticleSystem flash;
 
     // Gun Stats
-    public float damage = 20f;
+    public float damage = 100f;
     public float force = 50f;
     public float range = 100f;
     public float fireRate = 4f;

@@ -11,11 +11,9 @@ public class EnemyController : MonoBehaviour {
     public Transform playerTransform;
 
     public bool linking;
-    public bool isDead;
 
     public float timeBetweenAttacks = 1f;
     public float timeToAttack;
-
     public float timeToDie = 3f;
 
     // Enemy Sounds
@@ -23,54 +21,58 @@ public class EnemyController : MonoBehaviour {
     public AudioClip[] audios;
 
     // Enemy Stats
-    public float health = 100f;
+    public float health = 150f;
     public float damage = 25f;
     public float speed = 2f;
 
     public void Start() {
-        animator.SetFloat("Speed", agent.speed);
+        animator.GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
+        player = GameObject.Find("Player").GetComponent<PlayerController>();
         playerTransform = player.GetComponent<Transform>();
-        StartCoroutine(playAudios());
+        enemy = GetComponent<AudioSource>();
+
+        animator.SetFloat("Speed", agent.speed);
         timeToAttack = timeBetweenAttacks;
+        StartCoroutine(playAudios());
     }
     public void Update() {
-        agent.SetDestination(playerTransform.position);
+        if (agent.enabled) {
+            agent.SetDestination(playerTransform.position);
+            float distance = Vector3.Distance(transform.position, playerTransform.position);
+            if (distance <= agent.stoppingDistance) {
+                // Face Player
+                Vector3 direction = (playerTransform.position - transform.position).normalized;
+                Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
+                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
 
-        float distance = Vector3.Distance(transform.position, playerTransform.position) ;
-
-        if (!isDead && distance <= agent.stoppingDistance) {
-            // Face Player
-            Vector3 direction = (playerTransform.position - transform.position).normalized;
-            Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
-            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
-
-            // Attack Player
-            animator.SetBool("Attacking", true);
-            timeToAttack -= Time.deltaTime;
-            if (timeToAttack <= 0f) {
-                player.TakeDamage(damage);
+                // Attack Player
+                animator.SetBool("Attacking", true);
+                timeToAttack -= Time.deltaTime;
+                if (timeToAttack <= 0f) {
+                    player.TakeDamage(damage);
+                    timeToAttack = timeBetweenAttacks;
+                }
+            } else {
+                animator.SetBool("Attacking", false);
                 timeToAttack = timeBetweenAttacks;
             }
-        }else {
-            animator.SetBool("Attacking", false);
-            timeToAttack = timeBetweenAttacks;
         }
     }
-    public void FixedUpdate() {
-        if (agent.isOnOffMeshLink) {
-            if (!linking) {
-                linking = true;
-                agent.speed /= 5;
-            } else {
-                linking = false;
-                agent.velocity = Vector3.zero;
-                agent.speed *= 5;
-            }
-        }else {
-            agent.speed = speed;
-        }
-    }
+    //public void FixedUpdate() {
+    //    if (agent.isOnOffMeshLink) {
+    //        if (!linking) {
+    //            linking = true;
+    //            agent.speed /= 5;
+    //        } else {
+    //            linking = false;
+    //            agent.velocity = Vector3.zero;
+    //            agent.speed *= 5;
+    //        }
+    //    }else {
+    //        agent.speed = speed;
+    //    }
+    //}
     public IEnumerator playAudios() {
         yield return null;
         foreach (AudioClip clip in audios) {
@@ -90,9 +92,9 @@ public class EnemyController : MonoBehaviour {
         }
     }
     public IEnumerator Die(){
-        isDead = true;
         animator.SetTrigger("Death");
-        agent.isStopped = true; ;
+        agent.enabled = false;
+        GetComponent<Rigidbody>().detectCollisions = false;
         yield return new WaitForSeconds(timeToDie);
         Destroy(gameObject);
     }
