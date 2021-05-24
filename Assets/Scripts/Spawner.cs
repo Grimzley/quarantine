@@ -28,6 +28,7 @@ public class Spawner : MonoBehaviour {
     public List<Round> rounds;
     public int nextRound = 0;
     public int numberOfRounds = 1;
+    public int[] first10Round = {6, 8, 13, 18, 24, 26, 28, 28, 29, 33};
 
     public Transform[] spawnPoints;
 
@@ -77,10 +78,18 @@ public class Spawner : MonoBehaviour {
         float newSpawnRate = previousRound.spawnRate;
         if (nextRound < 9) {
             newEnemy.health += 100;
+            newCount = first10Round[nextRound];
         } else {
             newEnemy.health *= 1.1f;
+            newCount = EnemiesOnRound(nextRound + 1);
         }
         rounds.Add(new Round(newEnemy, newCount, newSpawnRate));
+    }
+    /**
+     * Formula for calculating the number of zombies per round in solo mode after round 10 according to the Zombies Wiki
+     */
+    public int EnemiesOnRound(int round) {
+        return (int) Mathf.Ceil(0.000058f * Mathf.Pow(round, 3) + 0.074032f * Mathf.Pow(round, 2) + 0.718119f * round + 14.738699f);
     }
     public IEnumerator Spawn(Round round) {
         state = SpawnState.SPAWNING;

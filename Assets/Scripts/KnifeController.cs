@@ -21,7 +21,7 @@ public class KnifeController : MonoBehaviour {
         gun.isKnifing = false;
     }
     public void OnTriggerEnter(Collider other) {
-        if (other.tag == "Enemy") {
+        if (other.tag == "Enemy" && gun.isKnifing) {
             EnemyController enemy = other.GetComponent<EnemyController>();
             enemy.TakeDamage(damage);
         }
