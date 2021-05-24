@@ -19,6 +19,7 @@ public class EnemyController : MonoBehaviour {
     // Enemy Sounds
     public AudioSource enemy;
     public AudioClip[] audios;
+    public float audioDelay = 3f;
 
     // Enemy Stats
     public float health = 150f;
@@ -75,14 +76,13 @@ public class EnemyController : MonoBehaviour {
     //}
     public IEnumerator playAudios() {
         yield return null;
-        foreach (AudioClip clip in audios) {
-            enemy.clip = clip;
-            enemy.Play();
-            while (enemy.isPlaying) {
-                yield return null;
-            }
-            yield return new WaitForSeconds(1);
+        AudioClip clip = audios[Random.Range(0, audios.Length)];
+        enemy.clip = clip;
+        enemy.Play();
+        while (enemy.isPlaying) {
+            yield return null;
         }
+        yield return new WaitForSeconds(audioDelay);
         StartCoroutine(playAudios());
     }
     public void TakeDamage(float damage) {

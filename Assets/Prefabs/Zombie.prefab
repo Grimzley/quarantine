@@ -2963,14 +2963,12 @@ MonoBehaviour:
   timeToDie: 3
   enemy: {fileID: 8296172668304537095}
   audios:
-  - {fileID: 8300000, guid: ff8240148ee026c4babb53949381e1cd, type: 3}
-  - {fileID: 8300000, guid: d0dd5a8e1fcf88c4c990c0c54c58a2ea, type: 3}
-  - {fileID: 8300000, guid: 821b6440d8e269c40b5a0eb8a44a079d, type: 3}
   - {fileID: 8300000, guid: 27b98a8c68f991b408c5c6afff25358c, type: 3}
-  - {fileID: 8300000, guid: ff8240148ee026c4babb53949381e1cd, type: 3}
-  - {fileID: 8300000, guid: d0dd5a8e1fcf88c4c990c0c54c58a2ea, type: 3}
   - {fileID: 8300000, guid: 821b6440d8e269c40b5a0eb8a44a079d, type: 3}
+  - {fileID: 8300000, guid: d0dd5a8e1fcf88c4c990c0c54c58a2ea, type: 3}
   - {fileID: 8300000, guid: d108e9ae3908d4d479e1e41cca0188a3, type: 3}
+  - {fileID: 8300000, guid: ff8240148ee026c4babb53949381e1cd, type: 3}
+  audioDelay: 3
   health: 150
   damage: 25
   speed: 2

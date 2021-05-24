@@ -6,12 +6,15 @@ public class GunController : MonoBehaviour {
 
     public Camera mainCamera;
     public PlayerController player;
+    public KnifeController knife;
 
     // Gun Animations
     public Animator animator;
     public bool isRunning;
     public bool isReloading;
+    public bool isKnifing;
     public float reloadTime = 2f;
+    public float holsterTime = 0.5f;
 
     // Gun Sounds
     public AudioSource gun;
@@ -22,18 +25,17 @@ public class GunController : MonoBehaviour {
     public ParticleSystem flash;
 
     // Gun Stats
-    public float damage = 100f;
-    public float force = 50f;
-    public float range = 100f;
+    public float damage = 20f;
+    public float headshotMultiplier = 3f;
     public float fireRate = 4f;
     private float timeToFire = 0f;
-    public int maxAmmo = 32;
+    public int maxAmmo = 80;
     public int currentAmmo;
     public int magazineSize = 8;
     public int currentMagazine;
 
     public void Start() {
-        currentAmmo = maxAmmo;
+        currentAmmo = 32;
         currentMagazine = magazineSize;
     }
     public void Update() {
@@ -44,7 +46,7 @@ public class GunController : MonoBehaviour {
             animator.SetBool("Run", false);
             isRunning = false;
         }
-        if (Input.GetButtonDown("Fire1") && Time.time >= timeToFire && !isReloading && currentMagazine > 0 && !isRunning) {
+        if (Input.GetButtonDown("Fire1") && Time.time >= timeToFire && !isReloading && currentMagazine > 0 && !isRunning && !isKnifing) {
             timeToFire = Time.time + 1f / fireRate;
             animator.SetBool("Shoot", true);
             Shoot();
@@ -54,28 +56,34 @@ public class GunController : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.R)) {
             ReloadGun();
         }
+        if (Input.GetKeyDown(KeyCode.V) && !isKnifing && !isReloading && !isRunning) {
+            animator.SetBool("Knife", true);
+            isKnifing = true;
+            StartCoroutine(knife.Knife(holsterTime));
+        }
     }
     public void Shoot() {
         gun.PlayOneShot(shoot);
         flash.Play();
         RaycastHit hit;
-        if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out hit, range)) {
+        if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out hit)) {
             if (hit.transform.tag == "Enemy") {
                 EnemyController enemy = hit.transform.GetComponent<EnemyController>();
-                enemy.TakeDamage(damage);
-            }
-            if (hit.rigidbody != null) {
-                hit.rigidbody.AddForce(-hit.normal * force);
+                if (hit.collider is CapsuleCollider) {
+                    enemy.TakeDamage(damage * headshotMultiplier);
+                }
+                else{
+                    enemy.TakeDamage(damage);
+                }
             }
         }
-
         currentMagazine--;
         if (currentMagazine == 0) {
             ReloadGun();
         }
     }
     public void ReloadGun() {
-        if (!isReloading && currentMagazine < magazineSize && currentAmmo > 0 && !isRunning) {
+        if (!isReloading && currentMagazine < magazineSize && currentAmmo > 0 && !isRunning && !isKnifing) {
             StartCoroutine(Reload());
         }
     }
