@@ -9,6 +9,7 @@ public class Menu : MonoBehaviour {
     public Button play;
     public Button controls;
     public Button settings;
+    public Button credits;
     public Button quit;
 
     public void Start() {
@@ -21,6 +22,9 @@ public class Menu : MonoBehaviour {
         settings = GameObject.Find("SettingsButton").GetComponent<Button>();
         settings.onClick.AddListener(Settings);
 
+        credits = GameObject.Find("CreditsButton").GetComponent<Button>();
+        credits.onClick.AddListener(Credits);
+
         quit = GameObject.Find("QuitButton").GetComponent<Button>();
         quit.onClick.AddListener(Quit);
     }
@@ -32,6 +36,9 @@ public class Menu : MonoBehaviour {
     }
     public void Settings() {
         SceneManager.LoadScene("Settings");
+    }
+    public void Credits() {
+        SceneManager.LoadScene("Credits");
     }
     public void Quit() {
         #if UNITY_EDITOR
