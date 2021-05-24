@@ -47628,7 +47628,7 @@ MonoBehaviour:
   mainCamera: {fileID: 1014420742}
   mouseSensitivity: 100
   xRotation: 0
-  walkingSpeed: 7
+  walkingSpeed: 5
   runningSpeed: 0
   currentSpeed: 0
   jumpHeight: 0.75
@@ -67405,6 +67405,7 @@ MonoBehaviour:
     spawnRate: 0.5
   nextRound: 0
   numberOfRounds: 1
+  first10Round: 06000000080000000d00000012000000180000001a0000001c0000001c0000001d00000021000000
   spawnPoints:
   - {fileID: 40015834}
   timeBetweenRounds: 5

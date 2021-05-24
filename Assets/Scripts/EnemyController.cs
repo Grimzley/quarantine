@@ -24,7 +24,6 @@ public class EnemyController : MonoBehaviour {
     // Enemy Stats
     public float health = 150f;
     public float damage = 25f;
-    public float speed = 2f;
 
     public void Start() {
         animator.GetComponent<Animator>();

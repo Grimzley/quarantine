@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour {
     public float xRotation = 0f;
 
     // Key Input
-    public float walkingSpeed = 7f;
+    public float walkingSpeed = 5f;
     public float runningSpeed;
     public float currentSpeed;
     public float jumpHeight = 0.75f;

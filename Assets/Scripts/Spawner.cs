@@ -40,6 +40,7 @@ public class Spawner : MonoBehaviour {
     public void Start() {
         roundCountdown = timeBetweenRounds;
         rounds[0].enemy.health = 150f;
+        rounds[0].enemy.agent.speed = 2f;
     }
     public void Update() {
         if (state == SpawnState.WAITING) {
@@ -80,6 +81,9 @@ public class Spawner : MonoBehaviour {
             newEnemy.health += 100;
             newCount = first10Round[nextRound];
         } else {
+            if (nextRound == 9){
+                newEnemy.agent.speed = 4f;
+            }
             newEnemy.health *= 1.1f;
             newCount = EnemiesOnRound(nextRound + 1);
         }
