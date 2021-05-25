@@ -2969,7 +2969,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: d108e9ae3908d4d479e1e41cca0188a3, type: 3}
   - {fileID: 8300000, guid: ff8240148ee026c4babb53949381e1cd, type: 3}
   audioDelay: 3
-  health: 150
+  health: 250
   damage: 25
 --- !u!195 &8296172668715607553
 NavMeshAgent:

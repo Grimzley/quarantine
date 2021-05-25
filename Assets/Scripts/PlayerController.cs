@@ -1,8 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour {
+
+    public Spawner spawner;
+
+    // Health Regeneration
+    public Image healthIndicator;
+    public float timeToRegenerate = 5f;
+    public float regenerateTime;
+    public bool isRegenerating;
 
     // Mouse Input
     public Transform mainCamera;
@@ -30,7 +39,11 @@ public class PlayerController : MonoBehaviour {
     // Player Stats
     public float health = 100f;
 
+    // UI Elements
+    public GameOver gameOverScreen;
+
     public void Start() {
+        healthIndicator = GameObject.Find("Health").GetComponent<Image>();
         runningSpeed = walkingSpeed * 1.5f;
         currentSpeed = walkingSpeed;
         playerMove.Play();
@@ -71,14 +84,33 @@ public class PlayerController : MonoBehaviour {
         controller.Move(move * currentSpeed * Time.deltaTime);
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
+
+        // Health Regeneration
+        if (health < 100) {
+            regenerateTime -= Time.deltaTime;
+            if (!isRegenerating) {
+                StartCoroutine(RegenerateHealth());
+            }
+        }
     }
     public void TakeDamage(float damage) {
         health -= damage;
+        healthIndicator.canvasRenderer.SetAlpha(healthIndicator.canvasRenderer.GetAlpha() + damage);
+        regenerateTime = timeToRegenerate;
         if (health <= 0) {
             Die();
         }
     }
+    public IEnumerator RegenerateHealth() {
+        isRegenerating = true;
+        yield return new WaitForSeconds(timeToRegenerate);
+        if (regenerateTime <= 0) {
+            TakeDamage(-25f);
+        }
+        isRegenerating = false;
+    }
     public void Die() {
-
+        gameOverScreen.gameOverScreen.SetActive(true);
+        gameOverScreen.DeathRound(spawner.nextRound + 1);
     }
 }
