@@ -37,8 +37,7 @@ public class Menu : MonoBehaviour {
         quit.onClick.AddListener(Quit);
     }
     public void Play() {
-        //SceneManager.LoadScene("LevelSelection");
-        SceneManager.LoadScene("Level1");
+        SceneManager.LoadScene("LevelSelection");
     }
     public void Controls() {
         SceneManager.LoadScene("Controls");
