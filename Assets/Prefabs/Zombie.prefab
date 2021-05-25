@@ -2960,7 +2960,7 @@ MonoBehaviour:
   linking: 0
   timeBetweenAttacks: 1
   timeToAttack: 0
-  timeToDie: 3
+  timeToDie: 5
   enemy: {fileID: 8296172668304537095}
   audios:
   - {fileID: 8300000, guid: 27b98a8c68f991b408c5c6afff25358c, type: 3}
@@ -2968,8 +2968,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: d0dd5a8e1fcf88c4c990c0c54c58a2ea, type: 3}
   - {fileID: 8300000, guid: d108e9ae3908d4d479e1e41cca0188a3, type: 3}
   - {fileID: 8300000, guid: ff8240148ee026c4babb53949381e1cd, type: 3}
-  audioDelay: 3
-  health: 250
+  audioDelay: 5
+  health: 150
   damage: 25
 --- !u!195 &8296172668715607553
 NavMeshAgent:
@@ -3058,7 +3058,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 24300002, guid: 46cb5f65a48bc25499cc1a84c0fda008, type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.7
   m_Pitch: 1
   Loop: 0
   Mute: 0

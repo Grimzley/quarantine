@@ -14,12 +14,12 @@ public class EnemyController : MonoBehaviour {
 
     public float timeBetweenAttacks = 1f;
     public float timeToAttack;
-    public float timeToDie = 3f;
+    public float timeToDie = 5f;
 
     // Enemy Sounds
     public AudioSource enemy;
     public AudioClip[] audios;
-    public float audioDelay = 3f;
+    public float audioDelay = 5f;
 
     // Enemy Stats
     public float health = 150f;
@@ -37,26 +37,35 @@ public class EnemyController : MonoBehaviour {
         StartCoroutine(playAudios());
     }
     public void Update() {
-        if (agent.enabled) {
-            agent.SetDestination(playerTransform.position);
-            float distance = Vector3.Distance(transform.position, playerTransform.position);
-            if (distance <= agent.stoppingDistance) {
-                // Face Player
-                Vector3 direction = (playerTransform.position - transform.position).normalized;
-                Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
-                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
+        if (!GameManager.isPaused) {
+            enemy.UnPause();
+            if (agent.enabled) {
+                agent.SetDestination(playerTransform.position);
+                float distance = Vector3.Distance(transform.position, playerTransform.position);
+                if (distance <= agent.stoppingDistance)
+                {
+                    // Face Player
+                    Vector3 direction = (playerTransform.position - transform.position).normalized;
+                    Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
+                    transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
 
-                // Attack Player
-                animator.SetBool("Attacking", true);
-                timeToAttack -= Time.deltaTime;
-                if (timeToAttack <= 0f) {
-                    player.TakeDamage(damage);
+                    // Attack Player
+                    animator.SetBool("Attacking", true);
+                    timeToAttack -= Time.deltaTime;
+                    if (timeToAttack <= 0f)
+                    {
+                        player.TakeDamage(damage);
+                        timeToAttack = timeBetweenAttacks;
+                    }
+                }
+                else
+                {
+                    animator.SetBool("Attacking", false);
                     timeToAttack = timeBetweenAttacks;
                 }
-            } else {
-                animator.SetBool("Attacking", false);
-                timeToAttack = timeBetweenAttacks;
             }
+        }else {
+            enemy.Pause();
         }
     }
     //public void FixedUpdate() {

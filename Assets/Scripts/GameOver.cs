@@ -25,7 +25,10 @@ public class GameOver : MonoBehaviour {
 
         gameOverScreen.SetActive(false);
     }
-    public void DeathRound(int round) {
+    public void GameOverScreen(int round) {
+        gameOverScreen.SetActive(true);
+        Time.timeScale = 0f;
+        Cursor.lockState = CursorLockMode.Confined;
         if (round == 1) {
             roundText.text = "You Survived 1 Round";
         }else {
@@ -33,9 +36,11 @@ public class GameOver : MonoBehaviour {
         }
     }
     public void TryAgain() {
+        GameManager.Reset();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
     public void MainMenu() {
+        GameManager.Reset();
         SceneManager.LoadScene("Menu");
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
@@ -13,6 +14,13 @@ public class Menu : MonoBehaviour {
     public Button quit;
 
     public void Start() {
+        EventSystem sceneEventSystem = FindObjectOfType<EventSystem>();
+        if (sceneEventSystem == null) {
+            GameObject eventSystem = new GameObject("EventSystem");
+            eventSystem.AddComponent<EventSystem>();
+            eventSystem.AddComponent<StandaloneInputModule>();
+        }
+
         play = GameObject.Find("PlayButton").GetComponent<Button>();
         play.onClick.AddListener(Play);
 
@@ -29,7 +37,8 @@ public class Menu : MonoBehaviour {
         quit.onClick.AddListener(Quit);
     }
     public void Play() {
-        SceneManager.LoadScene("LevelSelection");
+        //SceneManager.LoadScene("LevelSelection");
+        SceneManager.LoadScene("Level1");
     }
     public void Controls() {
         SceneManager.LoadScene("Controls");

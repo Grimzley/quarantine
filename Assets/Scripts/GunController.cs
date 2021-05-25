@@ -39,27 +39,32 @@ public class GunController : MonoBehaviour {
         currentMagazine = magazineSize;
     }
     public void Update() {
-        if (Input.GetKey(KeyCode.LeftShift) && !isReloading && (player.move.x != 0 || player.move.z != 0)) {
-            animator.SetBool("Run", true);
-            isRunning = true;
+        if (!GameManager.isPaused && !GameManager.isDead) {
+            gun.UnPause();
+            if (Input.GetKey(KeyCode.LeftShift) && !isReloading && (player.move.x != 0 || player.move.z != 0)) {
+                animator.SetBool("Run", true);
+                isRunning = true;
+            } else {
+                animator.SetBool("Run", false);
+                isRunning = false;
+            }
+            if (Input.GetButtonDown("Fire1") && Time.time >= timeToFire && !isReloading && currentMagazine > 0 && !isRunning && !isKnifing) {
+                timeToFire = Time.time + 1f / fireRate;
+                animator.SetBool("Shoot", true);
+                Shoot();
+            } else {
+                animator.SetBool("Shoot", false);
+            }
+            if (Input.GetKeyDown(KeyCode.R)) {
+                ReloadGun();
+            }
+            if (Input.GetKeyDown(KeyCode.V) && !isKnifing && !isReloading && !isRunning) {
+                animator.SetBool("Knife", true);
+                isKnifing = true;
+                StartCoroutine(knife.Knife(holsterTime));
+            }
         }else {
-            animator.SetBool("Run", false);
-            isRunning = false;
-        }
-        if (Input.GetButtonDown("Fire1") && Time.time >= timeToFire && !isReloading && currentMagazine > 0 && !isRunning && !isKnifing) {
-            timeToFire = Time.time + 1f / fireRate;
-            animator.SetBool("Shoot", true);
-            Shoot();
-        }else {
-            animator.SetBool("Shoot", false);
-        }
-        if (Input.GetKeyDown(KeyCode.R)) {
-            ReloadGun();
-        }
-        if (Input.GetKeyDown(KeyCode.V) && !isKnifing && !isReloading && !isRunning) {
-            animator.SetBool("Knife", true);
-            isKnifing = true;
-            StartCoroutine(knife.Knife(holsterTime));
+            gun.Pause();
         }
     }
     public void Shoot() {

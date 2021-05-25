@@ -51,46 +51,51 @@ public class PlayerController : MonoBehaviour {
         Cursor.lockState = CursorLockMode.Locked;
     }
     public void Update() {
-        // Mouse Input
-        float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * GameManager.mouseSensitivity * Time.deltaTime;
-        float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * GameManager.mouseSensitivity * Time.deltaTime;
-
-        transform.Rotate(Vector3.up * mouseX);
-        xRotation -= mouseY;
-        xRotation = Mathf.Clamp(xRotation, -90f, 90f); // 180 degree view looking up and down
-        mainCamera.transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
-
-        // Key Input
-        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
-        if (isGrounded && velocity.y < 0) {
-            velocity.y = 0;
-        }
-        float x = Input.GetAxis("Horizontal");
-        float z = Input.GetAxis("Vertical");
-        if (Input.GetButtonDown("Jump") && isGrounded) {
-            velocity.y = Mathf.Sqrt(jumpHeight * gravity * -2f); // The velocity required to jump a height h: v = sqrt(h*g*-2)
-        }
-        if (x == 0 && z == 0 || !isGrounded) {
-            playerMove.Pause();
-        }else {
+        if (!GameManager.isPaused && !GameManager.isDead) {
             playerMove.UnPause();
-        }
-        if (Input.GetKeyDown("left shift")) {
-            currentSpeed = runningSpeed;
-        }else if (Input.GetKeyUp("left shift")) {
-            currentSpeed = walkingSpeed;
-        }
-        move = transform.right * x + transform.forward * z;
-        controller.Move(move * currentSpeed * Time.deltaTime);
-        velocity.y += gravity * Time.deltaTime;
-        controller.Move(velocity * Time.deltaTime);
+            // Mouse Input
+            float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * GameManager.mouseSensitivity * Time.deltaTime;
+            float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * GameManager.mouseSensitivity * Time.deltaTime;
 
-        // Health Regeneration
-        if (health < 100) {
-            regenerateTime -= Time.deltaTime;
-            if (!isRegenerating) {
-                StartCoroutine(RegenerateHealth());
+            transform.Rotate(Vector3.up * mouseX);
+            xRotation -= mouseY;
+            xRotation = Mathf.Clamp(xRotation, -90f, 90f); // 180 degree view looking up and down
+            mainCamera.transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+
+            // Key Input
+            isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+            if (isGrounded && velocity.y < 0) {
+                velocity.y = 0;
             }
+            float x = Input.GetAxis("Horizontal");
+            float z = Input.GetAxis("Vertical");
+            if (Input.GetButtonDown("Jump") && isGrounded) {
+                velocity.y = Mathf.Sqrt(jumpHeight * gravity * -2f); // The velocity required to jump a height h: v = sqrt(h*g*-2)
+            }
+            if (x == 0 && z == 0 || !isGrounded) {
+                playerMove.Pause();
+            } else {
+                playerMove.UnPause();
+            }
+            if (Input.GetKeyDown("left shift")) {
+                currentSpeed = runningSpeed;
+            } else if (Input.GetKeyUp("left shift")) {
+                currentSpeed = walkingSpeed;
+            }
+            move = transform.right * x + transform.forward * z;
+            controller.Move(move * currentSpeed * Time.deltaTime);
+            velocity.y += gravity * Time.deltaTime;
+            controller.Move(velocity * Time.deltaTime);
+
+            // Health Regeneration
+            if (health < 100) {
+                regenerateTime -= Time.deltaTime;
+                if (!isRegenerating) {
+                    StartCoroutine(RegenerateHealth());
+                }
+            }
+        }else {
+            playerMove.Pause();
         }
     }
     public void TakeDamage(float damage) {
@@ -110,7 +115,7 @@ public class PlayerController : MonoBehaviour {
         isRegenerating = false;
     }
     public void Die() {
-        gameOverScreen.gameOverScreen.SetActive(true);
-        gameOverScreen.DeathRound(spawner.nextRound + 1);
+        GameManager.isDead = true;
+        gameOverScreen.GameOverScreen(spawner.nextRound + 1);
     }
 }

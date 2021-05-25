@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.Audio;
@@ -18,6 +19,20 @@ public class Settings : MonoBehaviour {
     public Button back;
 
     public void Start() {
+        EventSystem sceneEventSystem = FindObjectOfType<EventSystem>();
+        if (sceneEventSystem == null)
+        {
+            GameObject eventSystem = new GameObject("EventSystem");
+            eventSystem.AddComponent<EventSystem>();
+            eventSystem.AddComponent<StandaloneInputModule>();
+        }
+
+        AudioListener[] audioListeners = FindObjectsOfType<AudioListener>();
+        for (int i = 1; i < audioListeners.Length; i++) {
+                DestroyImmediate(audioListeners[i]);
+        }
+
+
         fullscreenToggle = GameObject.Find("FullscreenToggle").GetComponent<Toggle>();
         fullscreenToggle.onValueChanged.AddListener(SetFullscreen);
         fullscreenToggle.isOn = GameManager.isFullscreen;
@@ -77,6 +92,10 @@ public class Settings : MonoBehaviour {
         GameManager.mouseSensitivity = sensitivity;
     }
     public void Back() {
-        SceneManager.LoadScene("Menu");
+        if (SceneManager.sceneCount > 1) {
+            SceneManager.UnloadSceneAsync("Settings");
+        }else{
+            SceneManager.LoadScene("Menu");
+        }
     }
 }
