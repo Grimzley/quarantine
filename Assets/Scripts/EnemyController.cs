@@ -9,6 +9,7 @@ public class EnemyController : MonoBehaviour {
     public NavMeshAgent agent;
     public PlayerController player;
     public Transform playerTransform;
+    public Points points;
 
     public bool linking;
 
@@ -30,6 +31,7 @@ public class EnemyController : MonoBehaviour {
         agent = GetComponent<NavMeshAgent>();
         player = GameObject.Find("Player").GetComponent<PlayerController>();
         playerTransform = player.GetComponent<Transform>();
+        points = GameObject.Find("UI").GetComponent<Points>();
         enemy = GetComponent<AudioSource>();
 
         animator.SetFloat("Speed", agent.speed);
@@ -68,20 +70,18 @@ public class EnemyController : MonoBehaviour {
             enemy.Pause();
         }
     }
-    //public void FixedUpdate() {
-    //    if (agent.isOnOffMeshLink) {
-    //        if (!linking) {
-    //            linking = true;
-    //            agent.speed /= 5;
-    //        } else {
-    //            linking = false;
-    //            agent.velocity = Vector3.zero;
-    //            agent.speed *= 5;
-    //        }
-    //    }else {
-    //        agent.speed = speed;
-    //    }
-    //}
+    public void FixedUpdate() {
+        if (agent.isOnOffMeshLink) {
+            if (!linking) {
+                linking = true;
+                agent.speed /= 5;
+            } else {
+                linking = false;
+                agent.velocity = Vector3.zero;
+                agent.speed *= 5;
+            }
+        }
+    }
     public IEnumerator playAudios() {
         yield return null;
         AudioClip clip = audios[Random.Range(0, audios.Length)];
@@ -103,6 +103,7 @@ public class EnemyController : MonoBehaviour {
         animator.SetTrigger("Death");
         agent.enabled = false;
         GetComponent<Rigidbody>().detectCollisions = false;
+        points.EnemyKill();
         yield return new WaitForSeconds(timeToDie);
         Destroy(gameObject);
     }

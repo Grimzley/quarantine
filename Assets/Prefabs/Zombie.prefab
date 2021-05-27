@@ -2957,6 +2957,7 @@ MonoBehaviour:
   agent: {fileID: 8296172668715607553}
   player: {fileID: 0}
   playerTransform: {fileID: 0}
+  points: {fileID: 0}
   linking: 0
   timeBetweenAttacks: 1
   timeToAttack: 0
